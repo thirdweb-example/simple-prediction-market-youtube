@@ -1,7 +1,7 @@
 import { ConnectButton, lightTheme, useActiveAccount } from "thirdweb/react";
 import { client } from "@/app/client";
-import { baseSepolia } from "thirdweb/chains";
-import { inAppWallet } from "thirdweb/wallets";
+import { sepolia } from "thirdweb/chains";
+import { inAppWallet, createWallet} from "thirdweb/wallets";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
@@ -40,10 +40,29 @@ export function Navbar() {
             setIsClaimLoading(false);
         }
     };
+
+    const wallets = [
+        inAppWallet({
+            auth: {
+                options: [
+                    "google",
+                    "discord",
+                    "telegram",
+                    "email",
+                    "x",
+                ],
+            },
+        }),
+        createWallet("io.metamask"),
+        createWallet("com.coinbase.wallet"),
+        createWallet("me.rainbow"),
+        createWallet("io.rabby"),
+        createWallet("io.zerion.wallet"),
+    ];
     
     return (
         <div className="flex justify-between items-center mb-6">
-            <h1 className="text-2xl font-bold">Simple Prediction Market</h1>
+            <h1 className="text-2xl font-bold">OGG Prediction Market</h1>
             <div className="items-center flex gap-2">
                 {account && (
                     <Button 
@@ -64,7 +83,7 @@ export function Navbar() {
                 <ConnectButton 
                     client={client} 
                     theme={lightTheme()}
-                    chain={baseSepolia}
+                    chain={sepolia}
                     connectButton={{
                         style: {
                             fontSize: '0.75rem !important',
@@ -74,14 +93,14 @@ export function Navbar() {
                     }}
                     detailsButton={{
                         displayBalanceToken: {
-                            [baseSepolia.id]: "0x4D9604603527322F44c318FB984ED9b5A9Ce9f71"
+                            [sepolia.id]: "0x0691Df7181d2fCbF0FcEf6c1E6523948f5A01ad8"
                         }
                     }}
-                    wallets={[
-                        inAppWallet(),
-                    ]}
+                    wallets={
+                        wallets
+                    }
                     accountAbstraction={{
-                        chain: baseSepolia,
+                        chain: sepolia,
                         sponsorGas: true,
                     }}
                 />
